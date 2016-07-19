@@ -11,16 +11,18 @@ angular.module('giphy', [
         url: '/giphs',
         templateUrl: 'app/giphs.html',
         controller: 'GiphsController',
+        authenticate: true,
         resolve: {
           giphs: function (Giphs) {
             return Giphs.getAll();
           }
         }
       })
-      .state('createGiph', {
-        url: '/createGiph',
+      .state('translateGiph', {
+        url: '/translateGiph',
         templateUrl: 'app/translategiph.html',
-        controller: 'TranslateGiphController'
+        controller: 'TranslateGiphController',
+        authenticate: true
       })
       .state('signin', {
         url: '/signin',
@@ -32,8 +34,28 @@ angular.module('giphy', [
         template: '',
         controller: function ($stateParams, $location) {
           var accessToken = $stateParams.accessToken;
-          localStorage.setItem("giphy.my",accessToken);
+          localStorage.setItem("giphy.my", accessToken);
           $location.path("/giphs");
         }
       })
+      .state('signout', {
+        url: '/signout',
+        controller: '',
+        resolve: {
+          auth: function(Auth){
+            Auth.signout();
+          }
+        }
+      })
   })
+  .run(function ($rootScope, $location, Auth, $state) {
+    $rootScope.$on("$stateChangeStart",
+      function (event, toState, toParams, fromState, fromParams) {
+        if ( toState && toState.authenticate && !Auth.isAuth()){
+          event.preventDefault();
+          console.log("unauthorized");
+          $state.go("signin");
+        }
+      }
+    );
+  });

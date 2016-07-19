@@ -17,7 +17,6 @@ angular.module('giphy.giphs', [])
         }
     })
     .factory('Giphs', function ($http) {
-        // Your code here
         return {
             getAll: function () {
                 return $http({
