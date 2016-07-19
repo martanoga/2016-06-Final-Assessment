@@ -39,6 +39,6 @@ jspm_packages
 # secrets
 #config.js
 
-server/db/sqlite
+server/db/db.sqlite
 .vscode
 client/lib
