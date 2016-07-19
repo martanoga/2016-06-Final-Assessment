@@ -1,15 +1,17 @@
 var express = require('express');
 var session = require('express-session');
 var request = require('request');
+var bodyParser = require('body-parser')
+var passport = require('passport');
+var GithubStrategy = require('passport-github').Strategy;
 
 var config = require('../config.js');
 var db = require('./db/config.js');
 
-var app = express();
 var port = process.env.PORT || 3000;
 
-var passport = require('passport');
-var GithubStrategy = require('passport-github').Strategy;
+var app = express();
+app.use(bodyParser.json())
 
 app.use(express.static(__dirname + '/../client'));
 
@@ -56,28 +58,31 @@ app.listen(port, function () {
 app.get('/giphs', function (req, res) {
     var limit = 10;
     request.get({
-      url: config.GIPHY_TRENDING_URL,
-      qs: { api_key: config.GIPHY_PUBLIC_KEY, limit: limit }, 
+        url: config.GIPHY_TRENDING_URL,
+        qs: { api_key: config.GIPHY_PUBLIC_KEY, limit: limit },
     }, function (err, response, body) {
-      if (err) {
-        res.sendStatus('500');
-      } else {
-        res.json(body);
-      }
+        if (err) {
+            res.sendStatus('500');
+        } else {
+            res.json(JSON.parse(body).data)
+        }
     });
 })
 
-
-app.get('/translate', function (req, res) {
-    var toTranslate = req.query.s;
+app.post('/translate', function (req, res) {
+    var toTranslate = req.body.s;
     request.get({
-      url: config.GIPHY_TRANSLATE_URL,
-      qs: { api_key: config.GIPHY_PUBLIC_KEY, s: toTranslate }, 
+        url: config.GIPHY_TRANSLATE_URL,
+        qs: { api_key: config.GIPHY_PUBLIC_KEY, s: toTranslate },
+        headers: {
+            'Content-Type': 'application/json'
+        }
     }, function (err, response, body) {
-      if (err) {
-        res.sendStatus('500');
-      } else {
-        res.json(body);
-      }
+        if (err) {
+            res.sendStatus('500');
+        } else {
+
+            res.json(JSON.parse(body).data);
+        }
     });
 })
