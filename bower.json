@@ -1,0 +1,15 @@
+{
+  "name": "final-assesment",
+  "version": "0.0.0",
+  "authors": [],
+  "license": "UNLICENSED",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "client/lib"
+  ],
+  "dependencies": {
+    "angular": "^1.5.7",
+    "angular-ui-router": "^0.3.1"
+  }
+}

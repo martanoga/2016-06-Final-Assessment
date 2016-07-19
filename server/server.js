@@ -1,7 +1,9 @@
 var express = require('express');
 var session = require('express-session');
+var request = require('request');
 
 var config = require('../config.js');
+var db = require('./db/config.js');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -28,7 +30,7 @@ passport.use(new GithubStrategy({
 
 passport.serializeUser(function (user, done) {
     // for the time being tou can serialize the user 
-    // object {accessToken: accessToken, profile: profile }
+    // object {accessToken: accessTokdden, profile: profile }
     // In the real app you might be storing on the id like user.profile.iddd 
     done(null, user);
 });
@@ -43,11 +45,25 @@ passport.deserializeUser(function (user, done) {
 app.get('/auth', passport.authenticate('github'));
 app.get('/auth/callback',
     passport.authenticate('github', { failureRedirect: '/auth/error' }), function (req, res) {
-        res.redirect('/logedin.html');
+        res.redirect('/#/giphs');
     }
 );
 
 app.listen(port, function () {
     console.log("Server is listening on port", port);
 });
+
+app.get('/giphs', function (req, res) {
+
+    request.get({
+      url: config.GIPHY_TRENDING_URL,
+      qs: { api_key: config.GIPHY_PUBLIC_KEY}, 
+    }, function (err, response, body) {
+      if (err) {
+        res.sendStatus('500');
+      } else {
+        res.json(body);
+      }
+    });
+})
 
