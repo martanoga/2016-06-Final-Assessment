@@ -2,7 +2,7 @@
   "name": "final-assesment",
   "version": "1.0.0",
   "description": "Project for final self-assesment",
-  "main": "server.js\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[Ds\u001b[C\u001b[C\u001b[C\u001b[C\u001b[Cserrver/server.js",
+  "main": "server.js/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
