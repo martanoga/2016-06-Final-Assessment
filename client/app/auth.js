@@ -12,7 +12,7 @@ angular.module('giphy.auth', [])
             signout: function ($location) {
                 localStorage.removeItem("giphy.my");
                 //TBD: request to server to destroy user session
-                $location.go("signin");
+                $location.path("signin");
             }
 
         };
