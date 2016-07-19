@@ -12,9 +12,9 @@ angular.module('giphy', [
         templateUrl: 'app/giphs.html',
         controller: 'GiphsController',
         resolve: {
-            giphs: function(Giphs){
-                return Giphs.getAll();
-            }
+          giphs: function (Giphs) {
+            return Giphs.getAll();
+          }
         }
       })
       .state('createGiph', {
@@ -26,5 +26,14 @@ angular.module('giphy', [
         url: '/signin',
         templateUrl: 'app/signin.html',
         controller: 'AuthController'
+      })
+      .state('token', {
+        url: '/token/:accessToken',
+        template: '',
+        controller: function ($stateParams, $location) {
+          var accessToken = $stateParams.accessToken;
+          localStorage.setItem("giphy.my",accessToken);
+          $location.path("/giphs");
+        }
       })
   })

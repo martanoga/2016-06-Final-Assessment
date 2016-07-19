@@ -9,3 +9,4 @@ var Users = db.Collection.extend({
   model: User
 });
 
+module.exports = User;

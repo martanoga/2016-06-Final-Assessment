@@ -7,6 +7,7 @@ var GithubStrategy = require('passport-github').Strategy;
 
 var config = require('../config.js');
 var db = require('./db/config.js');
+var Users = require('./db/users.js');
 
 var port = process.env.PORT || 3000;
 
@@ -24,10 +25,29 @@ passport.use(new GithubStrategy({
     clientSecret: config.GITHUB_CLIENT_SECRET,
     callbackURL: config.GITHUB_CALLBACK
 }, function (accessToken, refreshToken, profile, done) {
-    done(null, {
-        accessToken: accessToken,
-        profile: profile
-    });
+    new Users({ 'user_id': profile.id }).fetch()
+        .then(function (existingUser) {
+            console.log(existingUser);
+            if (!existingUser) {
+                return new Users({ 'user_id': profile.id, 'username': profile.username }).save();
+            } else {
+                done(null, {
+                    accessToken: accessToken,
+                    profile: profile
+                });
+            }
+        })
+        .then(function (newUser) {
+            console.log(newUser);
+            done(null, {
+                accessToken: accessToken,
+                profile: profile
+            });
+        })
+        .catch(function (err) {
+            done(err, null);
+        })
+
 }));
 
 passport.serializeUser(function (user, done) {
@@ -44,16 +64,17 @@ passport.deserializeUser(function (user, done) {
     done(null, user);
 });
 
-app.get('/auth', passport.authenticate('github'));
-app.get('/auth/callback',
-    passport.authenticate('github', { failureRedirect: '/auth/error' }), function (req, res) {
-        res.redirect('/#/giphs');
-    }
-);
-
 app.listen(port, function () {
     console.log("Server is listening on port", port);
 });
+
+app.get('/auth', passport.authenticate('github'));
+app.get('/auth/callback',
+    passport.authenticate('github', { failureRedirect: '/auth/error' }), function (req, res) {
+        res.redirect('/#/token/' + req.session.passport.user.accessToken);
+    }
+);
+
 
 app.get('/giphs', function (req, res) {
     var limit = 10;

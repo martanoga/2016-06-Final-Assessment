@@ -4,6 +4,7 @@ angular.module('giphy.giphs', [])
         console.log("Hello from Giphs controller");
         $scope.giphs = giphs;
         console.log("GIPHS number: " + giphs.length);
+        console.log("TOKEN",localStorage.getItem("giphy.my"));
 
     })
     .controller('TranslateGiphController', function ($scope, Giphs) {
