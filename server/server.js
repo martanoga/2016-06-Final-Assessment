@@ -9,7 +9,8 @@ var config = require('../config.js');
 var db = require('./db/config.js');
 var Users = require('./db/users.js');
 
-var port = process.env.PORT || 3000;
+var port = 3000;
+
 
 var app = express();
 app.use(bodyParser.json())
