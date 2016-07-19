@@ -17,6 +17,11 @@ angular.module('giphy', [
             }
         }
       })
+      .state('createGiph', {
+        url: '/createGiph',
+        templateUrl: 'app/translategiph.html',
+        controller: 'TranslateGiphController'
+      })
       .state('signin', {
         url: '/signin',
         templateUrl: 'app/signin.html',

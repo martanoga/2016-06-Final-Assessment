@@ -54,10 +54,10 @@ app.listen(port, function () {
 });
 
 app.get('/giphs', function (req, res) {
-
+    var limit = 10;
     request.get({
       url: config.GIPHY_TRENDING_URL,
-      qs: { api_key: config.GIPHY_PUBLIC_KEY}, 
+      qs: { api_key: config.GIPHY_PUBLIC_KEY, limit: limit }, 
     }, function (err, response, body) {
       if (err) {
         res.sendStatus('500');
@@ -67,3 +67,17 @@ app.get('/giphs', function (req, res) {
     });
 })
 
+
+app.get('/translate', function (req, res) {
+    var toTranslate = req.query.s;
+    request.get({
+      url: config.GIPHY_TRANSLATE_URL,
+      qs: { api_key: config.GIPHY_PUBLIC_KEY, s: toTranslate }, 
+    }, function (err, response, body) {
+      if (err) {
+        res.sendStatus('500');
+      } else {
+        res.json(body);
+      }
+    });
+})
